@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Events\TransferComplete;
 use App\Http\Requests\TransferRequest;
+use App\Http\Resources\HistoryCollection;
+use App\Http\Resources\HistoryResource;
 use App\Repositories\AccountRepository;
 use App\Repositories\CardRepository;
 use App\Repositories\TransactionRepository;
@@ -49,5 +51,17 @@ class TransactionController extends Controller
             return response()->json(['res'=>true]);
         }
         return response()->json(['res'=>false]);
+    }
+
+    public function history(Request $req)
+    {
+        $topUsers = $this->transactionRepository->takeTop(3,10);
+        foreach($topUsers as $user)
+        {
+            $transactions = $this->transactionRepository->getByCardId($user->card_id,10);
+            $user['transactions'] = $transactions;
+        }
+
+        return new HistoryCollection($topUsers);
     }
 }

@@ -19,3 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/transfer',[\App\Http\Controllers\TransactionController::class,'transfer']);
+Route::post('/history',[\App\Http\Controllers\TransactionController::class,'history']);
